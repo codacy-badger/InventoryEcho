@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Container } from "reactstrap";
-
-import "bootstrap/dist/css/bootstrap.min.css";
+import BarcodeEntry from "./../components/BarcodeEntry"
 
 class SaleView extends Component {
   render() {
@@ -9,6 +8,7 @@ class SaleView extends Component {
       <React.Fragment>
         <Container>
           <h1>Yahoo welcome to SaleView</h1>
+          <BarcodeEntry />
         </Container>
       </React.Fragment>
     );
