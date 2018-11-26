@@ -22,7 +22,7 @@ class Item extends Component {
         <React.Fragment>
           <ListGroupItem >
             <div style={{ display: "inline-block", width: "90%" }}>
-              <div style={{ float: "left" }} onClick={this.props.toggleShowEditModal.bind(this, this.state)}>
+              <div style={{ float: "left" }} /*onClick={this.props.toggleShowEditModal.bind(this, this.state)}*/>
                 {this.state.name}<br />
                 {this.state.quantity}<br />
                 {moneyFormat(this.state.sellPrice)}
