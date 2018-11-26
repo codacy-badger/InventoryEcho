@@ -61,9 +61,13 @@ class SaleModal extends Component {
 
   logSale = () => {
     console.log("enter clicked");
-    this.currentItem.quantity -= this.state.currentQuantity
-    this.props.editItem(this.currentItem);
-    this.props.toggle();
+    if (this.currentItem.quantity >= this.state.currentQuantity && this.state.currentQuantity > -1) {
+      this.currentItem.quantity -= this.state.currentQuantity
+      this.props.editItem(this.currentItem);
+      this.props.toggle();
+    } else {
+      alert("Error: Quantity entered was invalid or more than what is in stock.");
+    }
   };
 
   render() {
