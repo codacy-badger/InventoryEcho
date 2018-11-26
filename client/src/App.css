@@ -3,6 +3,10 @@
   margin-bottom: 2rem;
 }
 
+.sale-container {
+  border: 1px solid gray;
+}
+
 .remove-btn {
   margin-right: 0.5rem;
 }

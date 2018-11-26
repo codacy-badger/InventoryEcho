@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect, Provider } from "react-redux";
 import { editItem } from "../actions/itemActions";
+import { moneyFormat } from "../helpers/helpers";
 import {
   Button,
   Container,
@@ -11,7 +12,6 @@ import {
   Col,
   Label
 } from "reactstrap";
-import Item from "./Item";
 import store from "../store";
 
 class SaleModal extends Component {
@@ -49,12 +49,20 @@ class SaleModal extends Component {
   formatResults = (itemQuery) => {
     this.currentItem = itemQuery[0];
     return (
-      <div className="col-md-3 pb-3" key={itemQuery[0]._id}>
-        <Item
-          key={itemQuery[0]._id}
-          name={itemQuery[0].name}
-          quantity={itemQuery[0].quantity}
-        />
+      <div className="sale-container">
+        <Row>
+          <Col>
+            <h2>{this.currentItem.name}</h2>
+          </Col>
+          <Col>
+            <Row>
+              <p>Sell Price: {moneyFormat(this.currentItem.sellPrice)}</p>
+            </Row>
+            <Row>
+              <p>Quantity: {this.currentItem.quantity}</p>
+            </Row>
+          </Col>
+        </Row>
       </div>
     );
   };

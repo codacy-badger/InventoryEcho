@@ -45,6 +45,13 @@ class ItemModal extends Component {
   };
 
   render() {
+    const itemFields = [
+      { name: "Name", id: "name" },
+      { name: "Quantity", id: "quantity" },
+      { name: "Purchase Price", id: "purchasePrice" },
+      { name: "Sell Price", id: "sellPrice" },
+      { name: "Barcode", id: "barcode" },
+    ]
     return (
       <div>
         <Button
@@ -61,47 +68,18 @@ class ItemModal extends Component {
           <ModalBody>
             <Form onSubmit={this.onSubmit}>
               <FormGroup>
-                <Label for="item">Name</Label>
-                <Input
-                  type="text"
-                  name="name"
-                  id="name"
-                  placeholder="Add Name Here..."
-                  onChange={this.onChange}
-                />
-                <Label for="item">Quantity</Label>
-                <Input
-                  type="text"
-                  name="quantity"
-                  id="quantity"
-                  placeholder="Add Quantity Here..."
-                  onChange={this.onChange}
-                />
-                <Label for="item">Purchase Price</Label>
-                <Input
-                  type="text"
-                  name="purchasePrice"
-                  id="purchasePrice"
-                  placeholder="Add Purchase Price Here..."
-                  // onKeyUp={this.handlePurchaseKeyUp}
-                  onChange={this.onChange}
-                />
-                <Label for="item">Sell Price</Label>
-                <Input
-                  type="text"
-                  name="sellPrice"
-                  id="sellPrice"
-                  placeholder="Add Sell Price Here..."
-                  onChange={this.onChange}
-                />
-                <Label for="item">Barcode</Label>
-                <Input
-                  type="text"
-                  name="barcode"
-                  id="barcode"
-                  placeholder="Add Barcode Here..."
-                  onChange={this.onChange}
-                />
+                {itemFields.map((item) =>
+                  <React.Fragment>
+                    <Label for={item.id}>{item.name}</Label>
+                    <Input
+                      type="text"
+                      name={item.id}
+                      id={item.id}
+                      placeholder={`Add ${item.name} Here...`}
+                      onChange={this.onChange}
+                    />
+                  </React.Fragment>
+                )}
                 <Button color="dark" style={{ marginTop: "2rem" }} block>
                   Publish
                 </Button>
