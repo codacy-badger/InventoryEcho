@@ -10,7 +10,8 @@ import {
   Input,
   Row,
   Col,
-  Label
+  Label,
+  Badge
 } from "reactstrap";
 import store from "../store";
 
@@ -19,22 +20,43 @@ class SaleModal extends Component {
     super(props);
     this.state = {
       searchResult: null,
+      currentPrice: 0,
       currentQuantity: 0
     };
     this.currentItem = null;
+  }
+
+  updateTotal = () => {
+    setTimeout(
+      function () {
+        this.setState({
+          currentPrice: this.currentItem.sellPrice * this.state.currentQuantity
+        });
+      }
+        .bind(this),
+      10
+    );
+
   }
 
   handleChange = (e) => {
     this.setState({
       currentQuantity: e.target.value
     });
+    this.updateTotal();
   };
 
   increment = () => {
     if (this.state.currentQuantity < this.currentItem.quantity) {
+      // we set the state's quantity to a temporary variable and incement
+      // this was done to stop a bug from appending a "1" to a manually
+      // entered value
+      let quantity = parseInt(this.state.currentQuantity);
+      quantity++;
       this.setState({
-        currentQuantity: this.state.currentQuantity + 1
+        currentQuantity: quantity
       });
+      this.updateTotal();
     }
   };
 
@@ -43,6 +65,7 @@ class SaleModal extends Component {
       this.setState({
         currentQuantity: this.state.currentQuantity - 1
       });
+      this.updateTotal();
     }
   };
 
@@ -61,6 +84,9 @@ class SaleModal extends Component {
             <Row>
               <p>Quantity: {this.currentItem.quantity}</p>
             </Row>
+            <Row>
+              <p>Quantity After Purchase: {this.currentItem.quantity - this.state.currentQuantity}</p>
+            </Row>
           </Col>
         </Row>
       </div>
@@ -68,7 +94,7 @@ class SaleModal extends Component {
   };
 
   logSale = () => {
-    console.log("enter clicked");
+    //We need to verify that the quantity entered is within reasonable bounds
     if (this.currentItem.quantity >= this.state.currentQuantity && this.state.currentQuantity > -1) {
       this.currentItem.quantity -= this.state.currentQuantity
       this.props.editItem(this.currentItem);
@@ -97,6 +123,9 @@ class SaleModal extends Component {
                     value={this.state.currentQuantity}
                     onChange={this.handleChange}
                   />
+                </Col>
+                <Col>
+                  <Label>Total: </Label><Badge color="secondary">{moneyFormat(this.state.currentPrice)}</Badge>
                 </Col>
               </Row>
               <Row>
