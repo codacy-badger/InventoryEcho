@@ -47,3 +47,27 @@ export const addItem = (item) => (dispatch) => {
     })
   );
 };
+
+export const editItem = (item) => (dispatch) => {
+  // console.log(item._id);
+  //send post request to add item
+  axios.delete(`/api/items/${item._id}`).then((res) =>
+    dispatch({
+      type: DELETE_ITEM,
+      payload: item._id
+    })
+  );
+  axios.post("/api/items", item).then((res) =>
+    dispatch({
+      type: ADD_ITEM,
+      payload: res.data
+    })
+  );
+  // {
+  //   name: item.name,
+  //   quantity: item.quantity,
+  //   purchasePrice: item.purchasePrice,
+  //   sellPrice: item.sellPrice,
+  //   barcode: item.barcode
+  // }  
+};

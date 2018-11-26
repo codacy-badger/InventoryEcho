@@ -3,7 +3,8 @@ import {
   ADD_ITEM,
   DELETE_ITEM,
   ITEMS_LOADING,
-  SEARCH_ITEMS
+  SEARCH_ITEMS,
+  EDIT_ITEM
 } from "../actions/types";
 
 const initialState = {
@@ -39,6 +40,10 @@ export default function (state = initialState, action) {
       return {
         ...state,
         itemQuery: action.payload
+      };
+    case EDIT_ITEM:
+      return {
+        ...state
       };
     default:
       return {

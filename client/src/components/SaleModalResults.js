@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect, Provider } from "react-redux";
 import { editItem } from "../actions/itemActions";
-//import PropTypes from "prop-types";
 import {
   Button,
   Container,
@@ -63,7 +62,7 @@ class SaleModal extends Component {
   logSale = () => {
     console.log("enter clicked");
     this.currentItem.quantity -= this.state.currentQuantity
-    this.props.editItem(this.currentItem._id);
+    this.props.editItem(this.currentItem);
     this.props.toggle();
   };
 
