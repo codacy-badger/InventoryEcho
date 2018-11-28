@@ -17,15 +17,34 @@ router.get("/", (req, res) => {
 // @desc    Create an item
 // @access  Public
 router.post("/", (req, res) => {
-  const newItem = new Item({
-    name: req.body.name,
-    quantity: req.body.quantity,
-    purchasePrice: req.body.purchasePrice,
-    sellPrice: req.body.sellPrice,
-    barcode: req.body.barcode,
-  });
+  //Get Item fields and save it to a new item object
+  const newItem = {};
 
-  newItem.save().then(item => res.json(item));
+  if (req.body.name) newItem.name = req.body.name;
+  if (req.body.quantity) newItem.quantity = req.body.quantity;
+  if (req.body.purchasePrice) newItem.purchasePrice = req.body.purchasePrice;
+
+  if (req.body.sellPrice) newItem.sellPrice = req.body.sellPrice;
+  if (req.body.barcode) newItem.barcode = req.body.barcode;
+
+  //If an ID was passed, then we will look for the item by the passed ID and try to updae it
+  if (req.body._id) {
+    Item.find({ _id: req.body._id }).then((item => {
+      if (item) {
+        Item.findOneAndUpdate(
+          { _id: req.body._id },
+          { $set: newItem },
+          { new: false }
+        ).then((item) => res.json(item))
+      } else {
+        errors = { query: "item not found" };
+        return res.status(404).json(errors);
+      }
+    }))
+  } else {
+    //If there was no ID passed, then we know we are trying to add a new item.
+    new Item(newItem).save().then((item) => res.json(item));
+  }
 });
 
 // @route GET api/product/search
@@ -77,7 +96,7 @@ router.get("/search/", (req, res) => {
 router.delete("/:id", (req, res) => {
   Item.findById(req.params.id)
     .then(item => item.remove().then(() => res.json({ success: true })))
-    .catch(err => res.status(404).json({ success: false }));
+    .catch(err => { console.log("FAIL\n\n\n\n\n\n"); res.status(404).json({ success: false }) });
 });
 
 module.exports = router;
