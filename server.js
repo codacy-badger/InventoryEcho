@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const items = require("./routes/api/items");
+const sales = require("./routes/api/sales");
 
 const app = express();
 
@@ -20,6 +21,7 @@ mongoose
 
 // Use Routes
 app.use("/api/items", items);
+app.use("/api/sales", sales);
 
 /* include process.env.PORT in case we 
    go to HEROKU, else just use port 3000 */

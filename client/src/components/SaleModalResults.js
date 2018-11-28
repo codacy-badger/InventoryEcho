@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect, Provider } from "react-redux";
-import { editItem } from "../actions/itemActions";
+import { addItem } from "../actions/itemActions";
+import { addSoldItem } from "../actions/saleActions"
 import { moneyFormat } from "../helpers/helpers";
 import {
   Button,
@@ -21,17 +22,47 @@ class SaleModal extends Component {
     this.state = {
       searchResult: null,
       currentPrice: 0,
-      currentQuantity: 0
+      currentQuantity: 0,
+      soldItem: {
+        name: "none",
+        _id: "none",
+        quantity: 0,
+        sellPrice: 0,
+        barcode: 0
+      }
     };
     this.currentItem = null;
+  }
+
+  updateSoldItem = () => {
+    setTimeout(
+      function () {
+        console.log(this.state.currentPrice);
+        //Save Desired Fields to the state to be logged in the database for sold items
+        this.setState({
+          soldItem: {
+            name: this.currentItem.name,
+            barcode: this.currentItem.barcode,
+            _id: this.currentItem._id,
+            quantity: this.state.currentQuantity,
+            sellPrice: this.state.currentPrice
+          }
+        });
+      }
+        .bind(this),
+      1000
+    );
   }
 
   updateTotal = () => {
     setTimeout(
       function () {
+        let currentTotal = this.currentItem.sellPrice * this.state.currentQuantity
+        currentTotal = parseFloat(Math.round(currentTotal * 100) / 100).toFixed(2);
         this.setState({
-          currentPrice: this.currentItem.sellPrice * this.state.currentQuantity
+          currentPrice: currentTotal,
         });
+        console.log(this.currentItem);
       }
         .bind(this),
       10
@@ -44,6 +75,7 @@ class SaleModal extends Component {
       currentQuantity: e.target.value
     });
     this.updateTotal();
+    this.updateSoldItem();
   };
 
   increment = () => {
@@ -57,6 +89,7 @@ class SaleModal extends Component {
         currentQuantity: quantity
       });
       this.updateTotal();
+      this.updateSoldItem();
     }
   };
 
@@ -66,6 +99,7 @@ class SaleModal extends Component {
         currentQuantity: this.state.currentQuantity - 1
       });
       this.updateTotal();
+      this.updateSoldItem();
     }
   };
 
@@ -97,7 +131,10 @@ class SaleModal extends Component {
     //We need to verify that the quantity entered is within reasonable bounds
     if (this.currentItem.quantity >= this.state.currentQuantity && this.state.currentQuantity > -1) {
       this.currentItem.quantity -= this.state.currentQuantity
-      this.props.editItem(this.currentItem);
+      this.updateSoldItem();
+      console.log("\n\n\n\n" + this.state.soldItem._id);
+      this.props.addItem(this.currentItem);
+      this.props.addSoldItem(this.state.soldItem);
       this.props.toggle();
     } else {
       alert("Error: Quantity entered was invalid or more than what is in stock.");
@@ -105,7 +142,6 @@ class SaleModal extends Component {
   };
 
   render() {
-    console.log(this.props);
     const { itemQuery } = this.props.item;
 
     if (itemQuery != null && itemQuery.length !== 0) {
@@ -163,10 +199,11 @@ class SaleModal extends Component {
 }
 
 const mapStateToProps = state => ({
-  item: state.item
+  item: state.item,
+  soldItem: state.soldItem
 });
 // if this.props.query is empty we will not show the ItemSearch page
 export default connect(
   mapStateToProps,
-  { editItem }
+  { addItem, addSoldItem }
 )(SaleModal);
